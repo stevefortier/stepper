@@ -53,7 +53,7 @@ class StepperMotor:
 			if stepCompleted:
 				self.remainingSteps = self.remainingSteps - 1
 		if (self.remainingSteps < 0):
-                        stepCompleted = self._subStep(self.halfstep_seq_back)
+			stepCompleted = self._subStep(self.halfstep_seq_back)
 			if stepCompleted:
 				self.remainingSteps = self.remainingSteps + 1
 
