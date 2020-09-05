@@ -2,7 +2,6 @@ import RPi.GPIO as GPIO
 import time
 
 class StepperMotor:
-
 	def __init__(self, pins):
 		self.pins = pins
 		self.halfstep_seq = [
@@ -35,7 +34,7 @@ class StepperMotor:
 			GPIO.setup(pin, GPIO.OUT)
 			GPIO.output(pin, 0)
 
-	def subStep(self, seq):
+	def _subStep(self, seq):
 		stepCompleted = False
 		if (self.seqProgress >= len(seq)):
 			self.seqProgress = 0
@@ -45,28 +44,16 @@ class StepperMotor:
 		self.seqProgress = self.seqProgress + 1
 		return stepCompleted
 
-#	def step(self, seq, delay):
-#		for halfstep in range(len(seq)):
-#			for pin in range(len(self.pins)):
-#				GPIO.output(self.pins[pin], seq[halfstep][pin])
-#			time.sleep(delay)
-
-#	def stepForwardSync(self, delay):
-#		self.step(self.halfstep_seq, delay)
-
-#	def stepBackwardSync(self, delay):
-#		self.step(self.halfstep_seq_back, delay)
-
 	def scheduleSteps(self, nbrSteps):
 		self.remainingSteps = nbrSteps
 
 	def update(self):
 		if (self.remainingSteps > 0):
-			stepCompleted = self.subStep(self.halfstep_seq)
+			stepCompleted = self._subStep(self.halfstep_seq)
 			if stepCompleted:
 				self.remainingSteps = self.remainingSteps - 1
 		if (self.remainingSteps < 0):
-                        stepCompleted = self.subStep(self.halfstep_seq_back)
+                        stepCompleted = self._subStep(self.halfstep_seq_back)
 			if stepCompleted:
 				self.remainingSteps = self.remainingSteps + 1
 
